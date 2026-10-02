@@ -1,149 +1,104 @@
-Frontend Application
-This is a React-based frontend application developed as part of a MERN (MongoDB, Express.js, React, Node.js) stack project. The application integrates modern web development technologies to deliver a responsive and interactive user interface.
-Features
-React 19 – Latest version of React with concurrent rendering capabilities
-React Router – Client-side routing for seamless navigation
-Google OAuth – Secure user authentication through Google accounts
-Axios – HTTP client for API communication
-JWT Authentication – Token-based user authentication and authorization
-React Icons – Icon library for user interface enhancement
-React Window – Optimized rendering for large data lists
-Testing – Jest and React Testing Library for unit and integration tests
-Prerequisites
-Node.js (version 14 or higher)
-npm (version 6 or higher) or Yarn
-Getting Started
-1.	Clone the repository
-git clone <repository-url>
-cd miniproject/frontend
-2.	Install dependencies
-npm install
-or
-yarn install
-3.	Environment Setup
-Create a .env file in the root directory and define the following variables:
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
-4.	Start the development server
-npm start
-or
-yarn start
-The application will be available at http://localhost:3000
-Project Structure
-src/
-├── components/ (Reusable UI components)
-├── pages/ (Page-level components)
-├── assets/ (Static assets such as images, fonts, etc.)
-├── context/ (React context providers)
-├── hooks/ (Custom React hooks)
-├── services/ (API and data services)
-├── styles/ (Global styles and themes)
-└── utils/ (Helper functions and constants)
-Testing
-To run the test suite:
-npm test
-or
-yarn test
-Build for Production
-npm run build
-or
-yarn build
-This creates an optimized production build in the “build” directory.
-Contributing
-1.	Fork the repository
-2.	Create a feature branch (git checkout -b feature/YourFeature)
-3.	Commit changes (git commit -m 'Add YourFeature')
-4.	Push the branch (git push origin feature/YourFeature)
-5.	Open a Pull Request
-License
-This project is licensed under the MIT License. Refer to the LICENSE file for details.
-Acknowledgments
-Create React App
-React Community
-All contributors and maintainers
-________________________________________
-Backend Server
-The backend server is built using Node.js, Express.js, and MongoDB. It provides RESTful API endpoints for the frontend and integrates with Google’s Generative AI services for intelligent evaluation features.
-Features
-Express.js – Lightweight web framework for building APIs
-MongoDB with Mongoose – Schema-based data modeling and validation
-JWT Authentication – Secure authentication using JSON Web Tokens
-CORS – Cross-Origin Resource Sharing configuration
-Environment Variables – Secure configuration using dotenv
-Google Generative AI – Integration with Gemini AI models
-Cookie Parser – Middleware for parsing HTTP cookies
-RESTful API – Modular and structured API design
-Prerequisites
-Node.js (version 14 or higher)
-npm (version 6 or higher) or Yarn
-MongoDB (local or cloud instance)
-Google Cloud account with access to Generative AI API
-Getting Started
-1.	Clone the repository
-git clone <repository-url>
-cd miniproject/backend
-2.	Install dependencies
-npm install
-or
-yarn install
-3.	Environment Setup
-Create a .env.local file in the root directory and define the following:
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-CLIENT_URL=http://localhost:3000
-GOOGLE_API_KEY=your_google_ai_api_key
-4.	Start the development server
-node server.js
-or
-npx nodemon server.js
-The server will be available at http://localhost:5000
-Project Structure
+# Candidate Interview System
+
+An AI-assisted technical interview platform built on the MERN stack. Candidates sign in, tell the system which languages and technologies they know, and take an interview made of generated multiple-choice and subjective questions. Answers are scored automatically and kept in a per-candidate history.
+
+> Team project. I worked on roughly half of it; this repository is my copy of the shared codebase.
+
+## Features
+
+- **Generated questions.** The backend asks Gemini (`gemini-2.5-flash`) for a mix of MCQ and subjective questions for each technology a candidate lists, at the difficulty stored on their profile.
+- **Automatic scoring.** MCQs are checked directly. Subjective answers are compared with a reference answer by the LLM, and a similarity score at or above a configurable threshold earns the mark. Failed evaluations are retried.
+- **Authentication.** Username/password and Google sign-in, with JWTs kept in cookies and a token refresh route.
+- **Candidate dashboard.** Profile details, interview history and per-interview results.
+- **Admin area.** Role-gated page to list and remove users.
+
+## Tech stack
+
+| Layer | Tools |
+| --- | --- |
+| Frontend | React 19 (Create React App), React Router 7, Axios, `@react-oauth/google`, React Window |
+| Backend | Node.js (ES modules), Express 5, official MongoDB driver, `jsonwebtoken`, `cookie-parser`, CORS |
+| AI | Google Gen AI SDK (`@google/genai`) |
+
+## Project structure
+
+```text
 backend/
-├── routes/
-│ ├── auth.js (Authentication routes)
-│ ├── dash.js (Dashboard routes)
-│ └── admin_routes.js (Admin management routes)
-├── models/ (Database schemas)
-├── middleware/ (Authentication and validation middleware)
-├── config/ (Configuration files)
-├── utils/ (Helper functions)
-├── server.js (Main application file)
-└── package.json (Project dependencies)
-API Endpoints
-Authentication
-POST /api/auth/register – Register a new user
-POST /api/auth/login – Authenticate user
-GET /api/auth/logout – Logout and clear session
-GET /api/auth/me – Retrieve logged-in user profile
-Dashboard
-GET /api/dashboard – Fetch dashboard data
-POST /api/interview – Initiate a new interview
-GET /api/interview/:id – Retrieve interview details
-Admin
-GET /api/admin/users – Retrieve all registered users
-PUT /api/admin/users/:id – Modify user role or access
-Authentication
-JWT tokens are used for session management.
-Include the token in the request header for accessing protected routes:
-Authorization: Bearer <your_jwt_token>
-CORS Configuration
-CORS is restricted to requests originating from the URL defined in the CLIENT_URL environment variable.
-Database
-The backend uses MongoDB with Mongoose ODM. Update the MONGODB_URI in .env.local with the appropriate connection string before running the server.
-Testing
-To execute backend tests (if implemented):
-npm test
-or
-yarn test
-Deployment
-1.	Build the application
-npm run build
-2.	Start the production server
-NODE_ENV=production node server.js
-Contributing
-1.	Fork the repository
-2.	Create a feature branch (git checkout -b feature/YourFeature)
-3.	Commit changes (git commit -m 'Add YourFeature')
-4.	Push the branch (git push origin feature/YourFeature)
-5.	Submit a Pull Request
+  server.js            Express app and route mounting
+  routes/
+    auth.js            login, Google login, token refresh, logout, user creation
+    dash.js            profile details and interview history
+    interview.js       question generation, answer submission, scoring
+    admin_routes.js    user listing and removal (admin only)
+    Verify_cookies.js  JWT cookie middleware
+  sample_questions.json  example of the generated question format
+frontend/
+  src/                 pages: Login, Dash, Details, Interview, Hist, Admin, AddUser
+```
+
+## Getting started
+
+Requirements: Node.js 18 or newer, a MongoDB instance (local or Atlas), a Google Gen AI API key and a Google OAuth client ID.
+
+### Backend
+
+```bash
+cd backend
+npm install
+```
+
+Create `backend/.env.local`:
+
+| Variable | Purpose |
+| --- | --- |
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret used to sign tokens |
+| `CLIENT_URL` | Frontend origin allowed by CORS, for example `http://localhost:3000` |
+| `API_KEY` | Google Gen AI API key |
+| `NO_QUESTIONS` | Questions per interview (optional, default 5) |
+| `RATIO` | Share of MCQs, from 0 to 1 (optional, default 0.5) |
+| `LLM_SIMILARITY` | Similarity needed to mark a subjective answer correct (optional, default 0.8) |
+
+```bash
+node server.js     # listens on http://localhost:5000
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+```
+
+Create `frontend/.env`:
+
+```bash
+REACT_APP_API_URI=http://localhost:5000
+REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
+```
+
+```bash
+npm start          # http://localhost:3000
+```
+
+## API overview
+
+| Method | Route | Description |
+| --- | --- | --- |
+| POST | `/login`, `/glogin` | Sign in with credentials or a Google token |
+| GET | `/token`, `/refresh`, `/logout` | Session helpers |
+| GET | `/check-username` | Username availability |
+| POST | `/add-user` | Create a user |
+| GET | `/check-hist`, `/check-details` | Interview history and profile |
+| POST | `/update-details` | Save languages, technologies and difficulty |
+| GET | `/generate/:id` | Generate questions for one of the candidate's topics |
+| POST | `/submit` | Submit answers for scoring |
+| GET | `/score/:id` | Fetch an interview's score |
+| GET | `/get-users` | List users (admin) |
+| POST | `/delete-user` | Remove a user (admin) |
+
+Protected routes expect the session cookie issued at login.
+
+## Status
+
+Built as a university project and still a work in progress. There is no automated test suite for the backend yet, and no licence has been chosen, so all rights are reserved.
