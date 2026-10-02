@@ -2,7 +2,7 @@
 
 An AI-assisted technical interview platform built on the MERN stack. Candidates sign in, tell the system which languages and technologies they know, and take an interview made of generated multiple-choice and subjective questions. Answers are scored automatically and kept in a per-candidate history.
 
-> Team project. I worked on roughly half of it; this repository is my copy of the shared codebase.
+> Team project built with a teammate, who wrote most of the code. This repository is my copy of the shared codebase.
 
 ## Features
 
